@@ -1,16 +1,17 @@
 #include <stdio.h>
-void nhapMang(int a[], int *n);
-void xuatMang(int a[], int n);
-void themPhanTu(int a[], int *n, int vitri, int giatri);
-void suaPhanTu(int a[], int n, int vitri, int giatri);
-void xoaPhanTu(int a[], int *n, int vitri);
-void sapXepTang(int a[], int n);
-void sapXepGiam(int a[], int n);
-int timKiemTuyenTinh(int a[], int n, int x);
-int timKiemNhiPhan(int a[], int n, int x);
+
+void inputArray(int arr[], int *n);
+void outputArray(int arr[], int n);
+void insertElement(int arr[], int *n, int pos, int value);
+void editElement(int arr[], int n, int pos, int value);
+void deleteElement(int arr[], int *n, int pos);
+void sortAscending(int arr[], int n);
+void sortDescending(int arr[], int n);
+int linearSearch(int arr[], int n, int x);
+int binarySearch(int arr[], int n, int x);
 
 int main() {
-    int a[100];
+    int arr[100];
     int n = 0, choice;
 
     do {
@@ -28,77 +29,87 @@ int main() {
 
         switch (choice) {
             case 1:
-                nhapMang(a, &n);
+                inputArray(arr, &n);
                 break;
+
             case 2:
-                xuatMang(a, n);
+                outputArray(arr, n);
                 break;
+
             case 3: {
-                int vitri, giatri;
+                int pos, value;
                 printf("Nhap vi tri can chen: ");
-                scanf("%d", &vitri);
+                scanf("%d", &pos);
                 printf("Nhap gia tri can chen: ");
-                scanf("%d", &giatri);
-                themPhanTu(a, &n, vitri, giatri);
+                scanf("%d", &value);
+                insertElement(arr, &n, pos, value);
                 break;
             }
+
             case 4: {
-                int vitri, giatri;
+                int pos, value;
                 printf("Nhap vi tri can sua: ");
-                scanf("%d", &vitri);
+                scanf("%d", &pos);
                 printf("Nhap gia tri moi: ");
-                scanf("%d", &giatri);
-                suaPhanTu(a, n, vitri, giatri);
+                scanf("%d", &value);
+                editElement(arr, n, pos, value);
                 break;
             }
+
             case 5: {
-                int vitri;
+                int pos;
                 printf("Nhap vi tri can xoa: ");
-                scanf("%d", &vitri);
-                xoaPhanTu(a, &n, vitri);
+                scanf("%d", &pos);
+                deleteElement(arr, &n, pos);
                 break;
             }
+
             case 6: {
-                char chon;
+                char option;
                 printf("\n--- MENU SAP XEP ---\n");
                 printf("a. Giam dan\n");
                 printf("b. Tang dan\n");
                 printf("Chon: ");
-                scanf(" %c", &chon);
-                if (chon == 'a') sapXepGiam(a, n);
-                else if (chon == 'b') sapXepTang(a, n);
+                scanf(" %c", &option);
+                if (option == 'a') sortDescending(arr, n);
+                else if (option == 'b') sortAscending(arr, n);
                 else printf("Lua chon khong hop le!\n");
                 break;
             }
+
             case 7: {
-                char chon;
-                int x, kq;
+                char option;
+                int x, result;
+
                 printf("\n--- MENU TIM KIEM ---\n");
                 printf("a. Tuyen tinh\n");
                 printf("b. Nhi phan\n");
                 printf("Chon: ");
-                scanf(" %c", &chon);
+                scanf(" %c", &option);
+
                 printf("Nhap gia tri can tim: ");
                 scanf("%d", &x);
 
-                if (chon == 'a') {
-                    kq = timKiemTuyenTinh(a, n, x);
-                } else if (chon == 'b') {
-                    kq = timKiemNhiPhan(a, n, x);
+                if (option == 'a') {
+                    result = linearSearch(arr, n, x);
+                } else if (option == 'b') {
+                    result = binarySearch(arr, n, x);
                 } else {
                     printf("Lua chon khong hop le!\n");
                     break;
                 }
 
-                if (kq == -1)
+                if (result == -1)
                     printf("Khong tim thay %d trong mang!\n", x);
                 else
-                    printf("Tim thay %d tai vi tri %d\n", x, kq);
+                    printf("Tim thay %d tai vi tri %d\n", x, result);
                 break;
             }
+
             case 8:
                 printf("Tam biet!\n");
                 break;
+
             default:
                 printf("Lua chon khong hop le!\n");
         }
@@ -107,86 +118,87 @@ int main() {
 
     return 0;
 }
-void nhapMang(int a[], int *n) {
+
+void inputArray(int arr[], int *n) {
     printf("Nhap so phan tu: ");
     scanf("%d", n);
     for (int i = 0; i < *n; i++) {
         printf("a[%d] = ", i);
-        scanf("%d", &a[i]);
+        scanf("%d", &arr[i]);
     }
 }
 
-void xuatMang(int a[], int n) {
+void outputArray(int arr[], int n) {
     printf("Mang hien tai: ");
     for (int i = 0; i < n; i++)
-        printf("%d ", a[i]);
+        printf("%d ", arr[i]);
     printf("\n");
 }
 
-void themPhanTu(int a[], int *n, int vitri, int giatri) {
-    if (vitri < 0 || vitri > *n) {
+void insertElement(int arr[], int *n, int pos, int value) {
+    if (pos < 0 || pos > *n) {
         printf("Vi tri khong hop le!\n");
         return;
     }
-    for (int i = *n; i > vitri; i--)
-        a[i] = a[i - 1];
-    a[vitri] = giatri;
+    for (int i = *n; i > pos; i--)
+        arr[i] = arr[i - 1];
+    arr[pos] = value;
     (*n)++;
 }
 
-void suaPhanTu(int a[], int n, int vitri, int giatri) {
-    if (vitri < 0 || vitri >= n) {
+void editElement(int arr[], int n, int pos, int value) {
+    if (pos < 0 || pos >= n) {
         printf("Vi tri khong hop le!\n");
         return;
     }
-    a[vitri] = giatri;
+    arr[pos] = value;
 }
 
-void xoaPhanTu(int a[], int *n, int vitri) {
-    if (vitri < 0 || vitri >= *n) {
+void deleteElement(int arr[], int *n, int pos) {
+    if (pos < 0 || pos >= *n) {
         printf("Vi tri khong hop le!\n");
         return;
     }
-    for (int i = vitri; i < *n - 1; i++)
-        a[i] = a[i + 1];
+    for (int i = pos; i < *n - 1; i++)
+        arr[i] = arr[i + 1];
     (*n)--;
 }
 
-void sapXepTang(int a[], int n) {
+void sortAscending(int arr[], int n) {
     for (int i = 0; i < n - 1; i++)
         for (int j = i + 1; j < n; j++)
-            if (a[i] > a[j]) {
-                int t = a[i];
-                a[i] = a[j];
-                a[j] = t;
+            if (arr[i] > arr[j]) {
+                int tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
             }
     printf("Da sap xep tang dan!\n");
 }
 
-void sapXepGiam(int a[], int n) {
+void sortDescending(int arr[], int n) {
     for (int i = 0; i < n - 1; i++)
         for (int j = i + 1; j < n; j++)
-            if (a[i] < a[j]) {
-                int t = a[i];
-                a[i] = a[j];
-                a[j] = t;
+            if (arr[i] < arr[j]) {
+                int tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
             }
     printf("Da sap xep giam dan!\n");
 }
 
-int timKiemTuyenTinh(int a[], int n, int x) {
+int linearSearch(int arr[], int n, int x) {
     for (int i = 0; i < n; i++)
-        if (a[i] == x) return i;
+        if (arr[i] == x) return i;
     return -1;
 }
 
-int timKiemNhiPhan(int a[], int n, int x) {
+int binarySearch(int arr[], int n, int x) {
     int left = 0, right = n - 1;
     while (left <= right) {
         int mid = (left + right) / 2;
-        if (a[mid] == x)
+        if (arr[mid] == x)
             return mid;
-        else if (a[mid] < x)
+        else if (arr[mid] < x)
             left = mid + 1;
         else
             right = mid - 1;
