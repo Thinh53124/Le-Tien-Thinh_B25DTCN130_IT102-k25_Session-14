@@ -10,6 +10,93 @@ void sortDescending(int arr[], int n);
 int linearSearch(int arr[], int n, int x);
 int binarySearch(int arr[], int n, int x);
 
+void inputArray(int arr[], int *n) {
+    printf("Nhap so phan tu: ");
+    scanf("%d", n);
+    for (int i = 0; i < *n; i++) {
+        printf("a[%d] = ", i);
+        scanf("%d", &arr[i]);
+    }
+}
+
+void outputArray(int arr[], int n) {
+    printf("Mang hien tai: ");
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    printf("\n");
+}
+
+void insertElement(int arr[], int *n, int pos, int value) {
+    if (pos < 0 || pos > *n) {
+        printf("Vi tri khong hop le!\n");
+        return;
+    }
+    for (int i = *n; i > pos; i--)
+        arr[i] = arr[i - 1];
+    arr[pos] = value;
+    (*n)++;
+}
+
+void editElement(int arr[], int n, int pos, int value) {
+    if (pos < 0 || pos >= n) {
+        printf("Vi tri khong hop le!\n");
+        return;
+    }
+    arr[pos] = value;
+}
+
+void deleteElement(int arr[], int *n, int pos) {
+    if (pos < 0 || pos >= *n) {
+        printf("Vi tri khong hop le!\n");
+        return;
+    }
+    for (int i = pos; i < *n - 1; i++)
+        arr[i] = arr[i + 1];
+    (*n)--;
+}
+
+void sortAscending(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++)
+        for (int j = i + 1; j < n; j++)
+            if (arr[i] > arr[j]) {
+                int tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+            }
+    printf("Da sap xep tang dan!\n");
+}
+
+void sortDescending(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++)
+        for (int j = i + 1; j < n; j++)
+            if (arr[i] < arr[j]) {
+                int tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+            }
+    printf("Da sap xep giam dan!\n");
+}
+
+int linearSearch(int arr[], int n, int x) {
+    for (int i = 0; i < n; i++)
+        if (arr[i] == x) return i;
+    return -1;
+}
+
+int binarySearch(int arr[], int n, int x) {
+    int left = 0, right = n - 1;
+    while (left <= right) {
+        int mid = (left + right) / 2;
+        if (arr[mid] == x)
+            return mid;
+        else if (arr[mid] < x)
+            left = mid + 1;
+        else
+            right = mid - 1;
+    }
+    return -1;
+}
+
 int main() {
     int arr[100];
     int n = 0, choice;
@@ -119,89 +206,3 @@ int main() {
     return 0;
 }
 
-void inputArray(int arr[], int *n) {
-    printf("Nhap so phan tu: ");
-    scanf("%d", n);
-    for (int i = 0; i < *n; i++) {
-        printf("a[%d] = ", i);
-        scanf("%d", &arr[i]);
-    }
-}
-
-void outputArray(int arr[], int n) {
-    printf("Mang hien tai: ");
-    for (int i = 0; i < n; i++)
-        printf("%d ", arr[i]);
-    printf("\n");
-}
-
-void insertElement(int arr[], int *n, int pos, int value) {
-    if (pos < 0 || pos > *n) {
-        printf("Vi tri khong hop le!\n");
-        return;
-    }
-    for (int i = *n; i > pos; i--)
-        arr[i] = arr[i - 1];
-    arr[pos] = value;
-    (*n)++;
-}
-
-void editElement(int arr[], int n, int pos, int value) {
-    if (pos < 0 || pos >= n) {
-        printf("Vi tri khong hop le!\n");
-        return;
-    }
-    arr[pos] = value;
-}
-
-void deleteElement(int arr[], int *n, int pos) {
-    if (pos < 0 || pos >= *n) {
-        printf("Vi tri khong hop le!\n");
-        return;
-    }
-    for (int i = pos; i < *n - 1; i++)
-        arr[i] = arr[i + 1];
-    (*n)--;
-}
-
-void sortAscending(int arr[], int n) {
-    for (int i = 0; i < n - 1; i++)
-        for (int j = i + 1; j < n; j++)
-            if (arr[i] > arr[j]) {
-                int tmp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = tmp;
-            }
-    printf("Da sap xep tang dan!\n");
-}
-
-void sortDescending(int arr[], int n) {
-    for (int i = 0; i < n - 1; i++)
-        for (int j = i + 1; j < n; j++)
-            if (arr[i] < arr[j]) {
-                int tmp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = tmp;
-            }
-    printf("Da sap xep giam dan!\n");
-}
-
-int linearSearch(int arr[], int n, int x) {
-    for (int i = 0; i < n; i++)
-        if (arr[i] == x) return i;
-    return -1;
-}
-
-int binarySearch(int arr[], int n, int x) {
-    int left = 0, right = n - 1;
-    while (left <= right) {
-        int mid = (left + right) / 2;
-        if (arr[mid] == x)
-            return mid;
-        else if (arr[mid] < x)
-            left = mid + 1;
-        else
-            right = mid - 1;
-    }
-    return -1;
-}
